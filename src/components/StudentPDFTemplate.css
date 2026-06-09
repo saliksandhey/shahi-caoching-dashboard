@@ -1,0 +1,199 @@
+/* 
+  Container to hide the PDF template from the user's view, 
+  but keep it in the DOM for html2canvas to capture.
+*/
+.pdf-hidden-container {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 
+  The actual document. 
+  A4 Size roughly translates to 794px by 1123px at 96 DPI.
+  We use a fixed pixel width so html2canvas renders it consistently.
+*/
+.pdf-document {
+  width: 800px;
+  min-height: 1131px;
+  background-color: #ffffff;
+  color: #1a1a1a; /* Dark text for light background */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  padding: 40px 50px;
+  box-sizing: border-box;
+}
+
+/* --- Header / Branding --- */
+.pdf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #7c3aed; /* Purple brand color */
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.pdf-brand-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #7c3aed;
+  letter-spacing: 1px;
+}
+
+.pdf-brand-subtitle {
+  margin: 5px 0 0 0;
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.pdf-doc-meta {
+  text-align: right;
+}
+
+.pdf-meta-badge {
+  display: inline-block;
+  background-color: #f1f5f9;
+  color: #475569;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+
+.pdf-date {
+  margin: 0;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* --- Title Bar --- */
+.pdf-title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8fafc;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  border-left: 4px solid #ec4899; /* Pink accent */
+}
+
+.pdf-title-bar h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.pdf-status {
+  font-size: 14px;
+  color: #334155;
+}
+
+.pdf-status strong {
+  color: #0f172a;
+}
+
+/* --- Grid Layout --- */
+.pdf-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.pdf-section {
+  margin-bottom: 25px;
+}
+
+.pdf-section-title {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #334155;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 8px;
+}
+
+/* --- Info Table --- */
+.pdf-info-table {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pdf-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 14px;
+}
+
+.pdf-info-row.pdf-col-layout {
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pdf-label {
+  color: #64748b;
+  font-weight: 500;
+  width: 40%;
+}
+
+.pdf-value {
+  color: #0f172a;
+  font-weight: 600;
+  width: 60%;
+  text-align: right;
+}
+
+.pdf-skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 10px;
+}
+
+.pdf-skill-tag {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+/* --- Notes --- */
+.pdf-note-box {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 15px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #334155;
+  min-height: 80px;
+}
+
+.pdf-muted {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* --- Footer --- */
+.pdf-footer {
+  margin-top: 60px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 20px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.pdf-footer-brand {
+  margin-top: 10px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
