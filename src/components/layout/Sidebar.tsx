@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, FileDown, Settings, Sparkles, X } from 'lucide-react';
+import { LayoutDashboard, Users, FileDown, Settings, Sparkles, X, LogOut } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
 import './Sidebar.css';
 
 interface SidebarProps {
@@ -60,6 +61,28 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile })
               <span className="status-dot online"></span>
               <span>System Online</span>
             </div>
+            <button 
+              onClick={async () => await supabase.auth.signOut()} 
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '0.75rem', 
+                color: 'var(--color-text-muted)', 
+                background: 'transparent', 
+                border: 'none', 
+                cursor: 'pointer',
+                fontSize: '0.875rem',
+                width: '100%',
+                marginTop: '1rem',
+                padding: '0.5rem 0',
+                transition: 'color 0.2s'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#ef4444'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}
+            >
+              <LogOut size={18} />
+              <span>Log Out</span>
+            </button>
           </div>
         </div>
       </aside>
