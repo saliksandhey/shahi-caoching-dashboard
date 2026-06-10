@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import type { Student } from '../types/database';
-import { X, Phone, MessageCircle, StickyNote, User, FileDown, Trash2 } from 'lucide-react';
+import { X, Phone, MessageCircle, FileDown, Trash2 } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { StudentPDFTemplate } from './StudentPDFTemplate';
 import html2canvas from 'html2canvas';

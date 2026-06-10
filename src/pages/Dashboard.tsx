@@ -37,7 +37,6 @@ export const Dashboard: React.FC = () => {
   const newThisMonth = students.filter(s => new Date(s.created_at) >= startOfMonth).length;
 
   const newLeads = students.filter(s => s.status === 'New Lead').length;
-  const beginnersCount = students.filter(s => s.skill_level === 'I am completely new').length;
 
   const recentStudents = students.slice(0, 5);
 
