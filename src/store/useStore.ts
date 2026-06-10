@@ -10,7 +10,6 @@ interface AppState {
   error: string | null;
   fetchStudents: () => Promise<void>;
   updateStudentStatus: (id: string, status: StudentStatus) => Promise<void>;
-  updateAdminNotes: (id: string, notes: string) => Promise<void>;
   deleteStudent: (id: string) => Promise<void>;
   bulkUpdateStatus: (ids: string[], status: StudentStatus) => Promise<void>;
   bulkDeleteStudents: (ids: string[]) => Promise<void>;
@@ -47,8 +46,7 @@ export const useStore = create<AppState>((set) => ({
       
       const mappedData = (data || []).map((row: any) => ({
         ...row,
-        status: row.status || 'New Lead',
-        admin_notes: row.admin_notes || ''
+        status: row.status || 'New Lead'
       }));
 
       set({ students: mappedData as Student[], isLoading: false });
@@ -73,24 +71,6 @@ export const useStore = create<AppState>((set) => ({
     } catch (err: any) {
       console.error('Error updating status:', err);
       alert('Failed to update status. Please make sure the status column exists in your Supabase table.');
-    }
-  },
-  
-  updateAdminNotes: async (id, notes) => {
-    try {
-      const { error } = await supabase
-        .from('registrations')
-        .update({ admin_notes: notes })
-        .eq('id', id);
-        
-      if (error) throw error;
-      
-      set((state) => ({
-        students: state.students.map((s) => s.id === id ? { ...s, admin_notes: notes } : s)
-      }));
-    } catch (err: any) {
-      console.error('Error updating notes:', err);
-      alert('Failed to save notes. Please make sure the admin_notes column exists in your Supabase table.');
     }
   },
   
@@ -160,8 +140,7 @@ export const useStore = create<AppState>((set) => ({
       if (data && data.length > 0) {
         const newStudent = {
           ...data[0],
-          status: data[0].status || 'New Lead',
-          admin_notes: data[0].admin_notes || ''
+          status: data[0].status || 'New Lead'
         } as Student;
         
         set((state) => ({

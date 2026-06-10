@@ -14,26 +14,14 @@ interface StudentDrawerProps {
 }
 
 export const StudentDrawer: React.FC<StudentDrawerProps> = ({ isOpen, onClose, student }) => {
-  const { updateStudentStatus, updateAdminNotes, deleteStudent } = useStore();
-  const [adminNotes, setAdminNotes] = useState('');
+  const { updateStudentStatus, deleteStudent } = useStore();
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const pdfRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (student) {
-      setAdminNotes(student.admin_notes || '');
-    }
-  }, [student]);
 
   if (!isOpen || !student) return null;
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     updateStudentStatus(student.id, e.target.value as any);
-  };
-
-  const handleSaveNotes = () => {
-    updateAdminNotes(student.id, adminNotes);
-    alert('Notes saved successfully');
   };
 
   const getWhatsAppLink = () => {
@@ -56,7 +44,8 @@ export const StudentDrawer: React.FC<StudentDrawerProps> = ({ isOpen, onClose, s
         logging: false
       });
       
-      const imgData = canvas.toDataURL('image/png');
+      // Use JPEG with 0.8 quality to massively reduce file size (down from ~10MB to <1MB)
+      const imgData = canvas.toDataURL('image/jpeg', 0.8);
       
       // A4 dimensions in mm: 210 x 297
       const pdf = new jsPDF({
@@ -68,7 +57,8 @@ export const StudentDrawer: React.FC<StudentDrawerProps> = ({ isOpen, onClose, s
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      // Add compressed JPEG to PDF
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
       pdf.save(`${student.full_name.replace(/\s+/g, '_')}_Profile.pdf`);
       
     } catch (error) {
@@ -150,8 +140,8 @@ export const StudentDrawer: React.FC<StudentDrawerProps> = ({ isOpen, onClose, s
                   <span className="info-value">{student.email_address || 'Not Provided'}</span>
                 </div>
                 <div className="info-row">
-                  <span className="info-label">Age</span>
-                  <span className="info-value">{student.age} Years</span>
+                  <span className="info-label">Date of Birth</span>
+                  <span className="info-value">{new Date(student.date_of_birth).toLocaleDateString()}</span>
                 </div>
                 <div className="info-row">
                   <span className="info-label">City</span>
@@ -174,66 +164,29 @@ export const StudentDrawer: React.FC<StudentDrawerProps> = ({ isOpen, onClose, s
                   </span>
                 </div>
                 <div className="info-row col-stack">
-                  <span className="info-label">Skills Selected For Learning</span>
-                  <div className="tags mt-2">
-                    {Array.isArray(student.skills_to_learn) 
-                      ? student.skills_to_learn.map((skill, idx) => (
-                          <span key={idx} className="tag">{skill}</span>
-                        ))
-                      : student.skills_to_learn ? (
-                          <span className="tag">{String(student.skills_to_learn)}</span>
-                        ) : <span className="text-muted">None specified</span>
-                    }
-                  </div>
+                  <span className="info-label">Additional Notes</span>
+                  <p className="mt-2 text-muted">{student.additional_notes || 'None specified'}</p>
                 </div>
               </div>
             </div>
 
-            <div className="info-group">
-              <h4 className="group-title">Additional Notes</h4>
-              <div className="notes-container">
-                {student.additional_notes && (
-                  <div className="note-block student-note">
-                    <div className="note-header">
-                      <User size={14} /> Student Note
-                    </div>
-                    <p className="note-body">{student.additional_notes}</p>
-                  </div>
-                )}
 
-                <div className="note-block admin-note">
-                  <div className="note-header">
-                    <StickyNote size={14} /> Admin Notes
-                  </div>
-                  <textarea 
-                    className="input-field notes-textarea mt-2" 
-                    placeholder="Add private notes here..."
-                    value={adminNotes}
-                    onChange={(e) => setAdminNotes(e.target.value)}
-                    rows={4}
-                  />
-                  <button className="btn-primary mt-3" onClick={handleSaveNotes}>
-                    Save Notes
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
-        </div>
-        
-        <div className="drawer-footer" style={{ padding: '20px', borderTop: '1px solid var(--color-border-light)', display: 'flex', justifyContent: 'flex-end' }}>
-          <button 
-            className="drawer-btn" 
-            style={{ color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.2)', background: 'transparent' }}
-            onClick={() => {
-              if(confirm(`Are you sure you want to permanently delete ${student.full_name}?`)) {
-                deleteStudent(student.id);
-                onClose();
-              }
-            }}
-          >
-            <Trash2 size={16} /> Delete Profile
-          </button>
+          
+          <div className="drawer-footer" style={{ padding: '20px', borderTop: '1px solid var(--color-border-light)', display: 'flex', justifyContent: 'flex-end', flexShrink: 0 }}>
+            <button 
+              className="drawer-btn" 
+              style={{ color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.2)', background: 'transparent' }}
+              onClick={() => {
+                if(confirm(`Are you sure you want to permanently delete ${student.full_name}?`)) {
+                  deleteStudent(student.id);
+                  onClose();
+                }
+              }}
+            >
+              <Trash2 size={16} /> Delete Profile
+            </button>
+          </div>
         </div>
       </div>
       <StudentPDFTemplate student={student} pdfRef={pdfRef} />

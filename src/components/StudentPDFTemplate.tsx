@@ -8,7 +8,6 @@ interface StudentPDFTemplateProps {
 }
 
 export const StudentPDFTemplate: React.FC<StudentPDFTemplateProps> = ({ student, pdfRef }) => {
-  const s = student as any;
   const registrationDate = new Date(student.created_at).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -52,11 +51,11 @@ export const StudentPDFTemplate: React.FC<StudentPDFTemplateProps> = ({ student,
               </div>
               <div className="pdf-info-row">
                 <span className="pdf-label">Father/Guardian Name</span>
-                <span className="pdf-value">{s.father_name || 'N/A'}</span>
+                <span className="pdf-value">{student.father_name || 'N/A'}</span>
               </div>
               <div className="pdf-info-row">
-                <span className="pdf-label">Age</span>
-                <span className="pdf-value">{student.age} Years</span>
+                <span className="pdf-label">Date of Birth</span>
+                <span className="pdf-value">{new Date(student.date_of_birth).toLocaleDateString()}</span>
               </div>
               <div className="pdf-info-row">
                 <span className="pdf-label">Mobile Number</span>
@@ -72,7 +71,7 @@ export const StudentPDFTemplate: React.FC<StudentPDFTemplateProps> = ({ student,
               </div>
               <div className="pdf-info-row">
                 <span className="pdf-label">Short Address</span>
-                <span className="pdf-value">{s.short_address || 'N/A'}</span>
+                <span className="pdf-value">{student.short_address || 'N/A'}</span>
               </div>
             </div>
           </div>
@@ -88,19 +87,6 @@ export const StudentPDFTemplate: React.FC<StudentPDFTemplateProps> = ({ student,
               <div className="pdf-info-row">
                 <span className="pdf-label">Current Skill Level</span>
                 <span className="pdf-value">{student.skill_level}</span>
-              </div>
-              <div className="pdf-info-row pdf-col-layout">
-                <span className="pdf-label">Selected Skills for Training</span>
-                <div className="pdf-skills-list">
-                  {Array.isArray(student.skills_to_learn) 
-                    ? student.skills_to_learn.map((skill, idx) => (
-                        <div key={idx} className="pdf-skill-tag">• {skill}</div>
-                      ))
-                    : student.skills_to_learn ? (
-                        <div className="pdf-skill-tag">• {String(student.skills_to_learn)}</div>
-                      ) : <div className="pdf-muted">None specified</div>
-                  }
-                </div>
               </div>
             </div>
           </div>

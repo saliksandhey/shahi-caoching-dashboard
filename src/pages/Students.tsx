@@ -39,6 +39,7 @@ export const Students: React.FC = () => {
     setSelectedStudents(newSelected);
   };
 
+
   const handleBulkStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value && selectedStudents.size > 0) {
       bulkUpdateStatus(Array.from(selectedStudents), e.target.value as any);
@@ -154,7 +155,7 @@ export const Students: React.FC = () => {
                 <th>Father Name</th>
                 <th>Contact</th>
                 <th>City</th>
-                <th>Date</th>
+                <th>Registration Date</th>
                 <th>Status</th>
                 <th className="actions-col">Actions</th>
               </tr>

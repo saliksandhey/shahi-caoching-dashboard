@@ -19,22 +19,13 @@ export const NewStudentModal: React.FC<NewStudentModalProps> = ({ isOpen, onClos
     father_name: '',
     mobile_number: '',
     email_address: '',
-    age: '',
+    date_of_birth: '',
     city: '',
     short_address: '',
     skill_level: 'I am completely new',
     status: 'New Lead',
     additional_notes: ''
   });
-
-  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
-
-  const interestsList = [
-    "Basic Stitching", "Suit Stitching", "Salwar Stitching", 
-    "Trouser Stitching", "Kurti Stitching", "Cutting", 
-    "Measurements", "Fabrics", "Boutique", 
-    "Advanced", "Complete Course"
-  ];
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -53,12 +44,8 @@ export const NewStudentModal: React.FC<NewStudentModalProps> = ({ isOpen, onClos
     setErrorMsg('');
     
     // Basic validation
-    if (!formData.full_name || !formData.father_name || !formData.mobile_number || !formData.age || !formData.city || !formData.short_address) {
+    if (!formData.full_name || !formData.father_name || !formData.mobile_number || !formData.date_of_birth || !formData.city || !formData.short_address) {
       setErrorMsg('Please fill in all required fields marked with an asterisk (*).');
-      return;
-    }
-    if (selectedInterests.length === 0) {
-      setErrorMsg('Please select at least one interest.');
       return;
     }
 
@@ -70,23 +57,20 @@ export const NewStudentModal: React.FC<NewStudentModalProps> = ({ isOpen, onClos
         father_name: formData.father_name,
         mobile_number: formData.mobile_number,
         email_address: formData.email_address,
-        age: parseInt(formData.age, 10),
+        date_of_birth: formData.date_of_birth,
         city: formData.city,
         short_address: formData.short_address,
         skill_level: formData.skill_level,
-        skills_to_learn: selectedInterests as any, // using any because some rows have array, some have string
-        additional_notes: formData.additional_notes,
         status: formData.status as any,
-        admin_notes: ''
+        additional_notes: formData.additional_notes
       } as any);
 
       // Reset form and close
       setFormData({
         full_name: '', father_name: '', mobile_number: '', email_address: '',
-        age: '', city: '', short_address: '', skill_level: 'I am completely new',
-        additional_notes: '', status: 'New Lead'
+        date_of_birth: '', city: '', short_address: '', skill_level: 'I am completely new',
+        status: 'New Lead', additional_notes: ''
       });
-      setSelectedInterests([]);
       onClose();
       
     } catch (err: any) {
@@ -139,8 +123,8 @@ export const NewStudentModal: React.FC<NewStudentModalProps> = ({ isOpen, onClos
                 <input type="email" name="email_address" value={formData.email_address} onChange={handleChange} className="input-field minimal-input" placeholder="Enter email address" />
               </div>
               <div className="form-group required">
-                <label>Age</label>
-                <input type="number" name="age" value={formData.age} onChange={handleChange} className="input-field minimal-input" placeholder="Enter age" required min="5" max="100" />
+                <label>Date of Birth</label>
+                <input type="date" name="date_of_birth" value={formData.date_of_birth} onChange={handleChange} className="input-field minimal-input" required />
               </div>
               <div className="form-group required">
                 <label>City</label>
@@ -161,29 +145,6 @@ export const NewStudentModal: React.FC<NewStudentModalProps> = ({ isOpen, onClos
                   <option value="I have some experience">I have some experience</option>
                   <option value="I stitch regularly">I stitch regularly</option>
                 </select>
-              </div>
-
-              <div className="form-group required col-span-2">
-                <label>INTERESTS</label>
-                <p className="form-hint">Select all that apply.</p>
-                <div className="interests-bubbles">
-                  {interestsList.map((interest) => (
-                    <button
-                      key={interest}
-                      type="button"
-                      className={`interest-bubble ${selectedInterests.includes(interest) ? 'active' : ''}`}
-                      onClick={() => {
-                        setSelectedInterests(prev => 
-                          prev.includes(interest) 
-                            ? prev.filter(i => i !== interest)
-                            : [...prev, interest]
-                        );
-                      }}
-                    >
-                      {interest}
-                    </button>
-                  ))}
-                </div>
               </div>
 
               <div className="form-group col-span-2 mt-4">
